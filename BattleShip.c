@@ -37,6 +37,8 @@ int main(){
     generate();
     inserimentoUtente();
 
+    battaglia();
+
     return 0;
 }
 
@@ -95,14 +97,14 @@ void inserimentoUtente(){
         int ind;
         switch(verso){
             case 0:
-                for(ind=row-1;ind>row-k+1;ind--){
+                for(ind=row-1;ind>=row-k;ind--){
                     if(playerBoard[ind][col-1] == 1){
                         printf("C'e' gia una nave in una delle caselle selezionate, reinseriscile\n");
                         goto start;
                     }
                 }
 
-                for(ind=row-1;ind>row-k+1;ind--){
+                for(ind=row-1;ind>=row-k;ind--){
                     playerBoard[ind][col-1] = 1;
                 }
 
@@ -129,7 +131,7 @@ void inserimentoUtente(){
                     }
                 }
 
-                for(ind=col-1;ind>col-k+1;ind--){
+                for(ind=col-1;ind>=col-k;ind--){
                     playerBoard[row-1][ind] = 1;
                 }
                 break;
@@ -256,6 +258,7 @@ void generateShips(int dimensione){
 
 void battaglia(){
 
+    getchar();
     int countP = 0, countC = 0;
     int rowBomb, colBomb;
 
@@ -268,7 +271,7 @@ void battaglia(){
 
         printf("riga: ");
         do{
-                scanf("%d", rowBomb);
+                scanf("%d", &rowBomb);
                 if(rowBomb>10 || rowBomb<1){
                     printf("errore, reinserire: ");
                 }
@@ -277,7 +280,7 @@ void battaglia(){
 
         printf("colonna: ");
         do{
-                scanf("%d", colBomb);
+                scanf("%d", &colBomb);
                 if(colBomb>10 || colBomb<1){
                     printf("errore, reinserire: ");
                 }
@@ -285,6 +288,7 @@ void battaglia(){
             }while(colBomb>10 || colBomb<1);
 
         printf("Caricando i cannoni...\n");
+        getchar();
         getchar();
         printf("puntando...\n");
         getchar();
@@ -295,10 +299,12 @@ void battaglia(){
 
         computerBoard[rowBomb-1][colBomb-1] = 3;
 
+        printf("Ecco il campo di battaglia del computer: \n\n");
         int i,j;
         for(i=0;i<DIM;i++){
             for(j=0;j<DIM;j++){
                 if(computerBoard[i][j] == 3) printf("|X");
+                else printf("| ");
             }
             printf("|\n");
         }
@@ -313,7 +319,7 @@ void battaglia(){
 
         //computer's turn
         system("cls");
-        printf("\n\nAdesso tocca a me.");
+        printf("\n\nAdesso tocca a me.\n\n");
 
         bool hit = false, est = false, ovest = false, sud = false, nord = false;
 
@@ -372,20 +378,12 @@ void battaglia(){
             }
         }
 
-        playerBoard[rowBomb-1][colBomb-1] = 3;
+        playerBoard[randRow-1][randCol-1] = 3;
 
-        for(i=0;i<DIM;i++){
-            for(j=0;j<DIM;j++){
-                if(playerBoard[i][j] == 3) printf("|X");
-            }
-            printf("|\n");
-        }
-
-        if(playerBoard[rowBomb-1][colBomb-1] == 1){
+        if(playerBoard[randRow-1][randCol-1] == 1){
             printf("La mia infinita intelligenza ti ha obliterato.\n");
 
             if (hit == true){
-                //capire da che direzione sono arrivato e continuare cosi.
                 //se prima colpisce e poi sbaglia direzione dovrebbe tornare indietro e provarne un'altra invece che andare a caso
                 if (randRow-prevRow == 1){
                         sud = true;
@@ -409,7 +407,17 @@ void battaglia(){
                 hit = false;
         }
 
-        printf("premi un tasto per continuare. ");
+        printf("\n\nEcco il tuo campo di battaglia: \n\n");
+
+        for(i=0;i<DIM;i++){
+            for(j=0;j<DIM;j++){
+                if(playerBoard[i][j] == 3) printf("|X");
+                else printf("| ");
+            }
+            printf("|\n");
+        }
+
+        printf("\n\npremi un tasto per continuare. ");
         getchar();
     }
 
